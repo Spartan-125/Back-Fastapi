@@ -3,7 +3,6 @@ from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from starlette.middleware.base import BaseHTTPMiddleware
-from fastapi.encoders import jsonable_encoder
 
 T = TypeVar('T')
 
@@ -55,15 +54,6 @@ def create_response(data=None, error=None, status_code=200):
         status_code=status_code,
         content=content
     )
-
-# Ejemplo de uso en un endpoint
-def example_success_endpoint():
-    user_data = {"id": 1, "name": "User"}
-    return create_response(data=user_data)
-
-def example_error_endpoint():
-    error = {"message": "Resource not found", "code": "NOT_FOUND"}
-    return create_response(error=error, status_code=404)
 
 # Para configurar el middleware en tu aplicación principal
 def configure_app(app: FastAPI):
