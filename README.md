@@ -63,8 +63,8 @@ tests/
 
 1. Clonar el repositorio:
 ```bash
-git clone [URL DEL REPOSITORIO]
-cd [NOMBRE DEL DIRECTORIO]
+git clone https://github.com/Spartan-125/Back-Fastapi.git
+cd Back-Fastapi
 ```
 
 2. Crear un entorno virtual:
@@ -115,11 +115,9 @@ La documentación de la API estará disponible en `http://localhost:8000/docs`
 ## Endpoints
 
 ### Autenticación
-- `POST /api/token` - Obtener token JWT
+- `POST /api/login` - Obtener token JWT
 
 ### Usuarios
 - `POST /api/v1/users/` - Crear usuario
 - `GET /api/v1/users/me/` - Obtener usuario actual
 - `GET /api/v1/users/{user_id}` - Obtener usuario por ID
-
-### Items
