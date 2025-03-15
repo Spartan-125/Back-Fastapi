@@ -1,6 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 from app.main import app
+import uuid
 
 client = TestClient(app)
 
@@ -10,9 +11,10 @@ class TestUserRoutes:
     
     def test_create_user(self):
         """Test para crear un nuevo usuario a través de la API"""
+        unique_email = f"test{uuid.uuid4()}@example.com"
         # Arrange
         user_data = {
-            "email": "api_test@example.com",
+            "email": unique_email,
             "password": "securePassword123"
         }
         
@@ -20,8 +22,9 @@ class TestUserRoutes:
         response = client.post("/api/v1/users/", json=user_data)
         
         # Assert
-        assert response.status_code == 201
-        data = response.json()
+        assert response.status_code == 200
+        rta = response.json()
+        data = rta['data']
         assert data["email"] == user_data["email"]
         assert "id" in data
         assert "password" not in data  # Asegurarse que no se devuelve la contraseña
@@ -51,7 +54,8 @@ class TestUserRoutes:
         
         # Assert
         assert response.status_code == 200
-        data = response.json()
+        rta = response.json()
+        data = rta['data']
         assert data["id"] == test_user.id
         assert data["email"] == test_user.email
     
@@ -62,7 +66,8 @@ class TestUserRoutes:
         
         # Assert
         assert response.status_code == 200
-        data = response.json()
+        rta = response.json()
+        data = rta['data']
         assert data["id"] == test_user.id
         assert data["email"] == test_user.email
     

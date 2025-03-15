@@ -7,7 +7,7 @@ from app.application.usecases.user_usecase import UserUseCase, UserCreate, UserU
 class TestUserUseCase:
     """Tests para el caso de uso de usuarios"""
     
-    def test_create_user_success(self):
+    def test_create_user_success(self, monkeypatch):
         """Test para crear usuario exitosamente"""
         # Arrange
         mock_repository = Mock()
@@ -21,12 +21,11 @@ class TestUserUseCase:
         user_data = UserCreate(email="test@example.com", password="password123")
         
         # Act
-        with pytest.monkeypatch.context() as m:
-            # Mock la función de hash de contraseñas
-            m.setattr('app.application.usecases.user_usecase.get_password_hash', 
-                      lambda password: f"hashed_{password}")
+        # Usar monkeypatch directamente como fixture
+        monkeypatch.setattr('app.application.usecases.user_usecase.get_password_hash', 
+                    lambda password: f"hashed_{password}")
             
-            result = usecase.create_user(user_data)
+        result = usecase.create_user(user_data)
         
         # Assert
         assert result is not None
@@ -89,7 +88,7 @@ class TestUserUseCase:
         assert result is None
         mock_repository.get_by_id.assert_called_once_with(999)
         
-    def test_update_user_success(self):
+    def test_update_user_success(self, monkeypatch):  # Agrega monkeypatch como parámetro
         """Test para actualizar usuario exitosamente"""
         # Arrange
         mock_repository = Mock()
@@ -107,11 +106,11 @@ class TestUserUseCase:
         user_update = UserUpdate(email="new@example.com", is_active=False)
         
         # Act
-        with pytest.monkeypatch.context() as m:
-            m.setattr('app.application.usecases.user_usecase.get_password_hash', 
-                      lambda password: f"hashed_{password}")
+        # Usa directamente el monkeypatch pasado como parámetro
+        monkeypatch.setattr('app.application.usecases.user_usecase.get_password_hash', 
+                    lambda password: f"hashed_{password}")
             
-            result = usecase.update_user(1, user_update)
+        result = usecase.update_user(1, user_update)
         
         # Assert
         assert result is not None

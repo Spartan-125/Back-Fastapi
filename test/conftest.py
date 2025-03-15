@@ -73,16 +73,24 @@ def db_session(test_db):
 def test_user(test_db):
     from app.domain.entities import User
     from app.infrastructure.auth.jwt import get_password_hash
+    import uuid
     
-    # Crear usuario de prueba
+    # Crear usuario con email único
+    unique_email = f"test{uuid.uuid4()}@example.com"
+    
     user = User(
-        email="test@example.com",
+        email=unique_email,
         hashed_password=get_password_hash("testpassword"),
         is_active=True
     )
-    test_db.add(user)
-    test_db.commit()
-    test_db.refresh(user)
+    
+    # Comprueba si el usuario ya existe
+    existing_user = test_db.query(User).filter(User.email == unique_email).first()
+    if not existing_user:
+        test_db.add(user)
+        test_db.commit()
+        test_db.refresh(user)
+    
     return user
 
 # Fixture para token de autenticación
